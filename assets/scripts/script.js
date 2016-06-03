@@ -3,11 +3,11 @@ window.onload = function() {
     var c = document.getElementById("main");
     window.ctx = c.getContext("2d"); // Dealing with a global context is easier
     
-    //draw();
     
-    animate();
+    
     
 } // window.onload
+
 
 var star = {
 	x:50,
@@ -56,3 +56,28 @@ function animate(){
     setTimeout(animate, 33);
 
 }
+
+
+
+// Let's create a draw function for the canvas
+var moon = {
+
+    x:95,
+    y:50,
+    draw: function() {
+        
+        
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 25, 1.75*Math.PI, Math.PI*0.25, true);
+        ctx.stroke();
+        ctx.closePath();
+        ctx.beginPath();
+        ctx.arc(this.x+7, this.y, 20, 1.68*Math.PI, 0.32*Math.PI, true);
+        ctx.stroke();
+        ctx.closePath();
+        
+
+        
+    }
+
+};
