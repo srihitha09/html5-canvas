@@ -2,7 +2,6 @@ window.onload = function() {
     
     var c = document.getElementById("main");
     window.ctx = c.getContext("2d"); // Dealing with a global context is easier
-    
     //addShapes();
     animate();
     
@@ -12,8 +11,8 @@ var moon = {
 
     x:95,
     y:100,
-    vx:7,
-    vy:10,
+    vx:3,
+    vy:5,
     draw: function() {
         
         
@@ -39,8 +38,8 @@ var star = {
 	outerRadius:25,
 	innerRadius:10,
 
-	vx:10,
-	vy:5,
+	vx:5,
+	vy:2,
 
 	draw: function(){
 		ctx.beginPath();
