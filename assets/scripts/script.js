@@ -3,7 +3,10 @@ window.onload = function() {
     var c = document.getElementById("main");
     window.ctx = c.getContext("2d"); // Dealing with a global context is easier
     //addShapes();
-    animate();
+    loadImg();
+    //window.ctx.fillStyle = "black";
+    //window.ctx.fillRect(0,0,width,height);
+    //animate();
     
 } // window.onload
 
@@ -55,16 +58,86 @@ var star = {
 	}
 }
 
+// spawn a new object every 1000ms
+var spawnRate = 1000;
+
+// when was the last object spawned
+var lastSpawn = -1;
+
+// this array holds all spawned object
+var spawnedBlackHoles = [];
+
+var blackholes = [];
+// save the starting time (used to calc elapsed time)
+var startTime = Date.now();
+
 function addShapes(){
 
 
 }
 
+function loadImg(){
+
+    var black = new Image();
+    black.src = 'assets/images/black.svg';
+    var blue = new Image();
+    blue.src = 'assets/images/blue.svg';
+    var purple = new Image();
+    purple.src = 'assets/images/purple.svg';
+
+    blackholes.push(black);
+    blackholes.push(blue);
+    blackholes.push(purple);
+
+    animate();
+}
+
+function spawnRandomObject() {
+
+    var t;
+    // create the new object
+    var blackhole = {
+        // set this objects type
+        type: t,
+        // set x randomly 
+        x: Math.random() * (1000 - 50),
+        
+        y: Math.random() * (640 - 50),
+        // give random image
+        image: blackholes[Math.floor(Math.random()*blackholes.length)]
+    }
+    if (isOverlapping(blackhole, spawnedBlackHoles)!=true){
+        // add the new black hole to the array of spawned holes
+        spawnedBlackHoles.push(blackhole);
+    }
+}
+
 function animate(){
+    window.ctx.fillStyle = "black";
+    window.ctx.fillRect(0,0,width,height);
         var shapes = new Array(star,moon);
-	    var width = 1000;
+
+
+    var width = 1000;
     var height = 640;
-	window.ctx.clearRect(0,0,width,height);
+
+    // get the elapsed time
+    var time = Date.now();
+
+    // see if its time to spawn a new object
+    if (time > (lastSpawn + spawnRate)) {
+        lastSpawn = time;
+        spawnRandomObject();
+    }
+
+	ctx.clearRect(0,0,width,height);
+
+    for (var i = 0; i < spawnedBlackHoles.length; i++) {
+        var currentHole = spawnedBlackHoles[i];
+        
+        //draw the black hole
+        ctx.drawImage(currentHole.image, currentHole.x, currentHole.y);
+    }
 
     for (var i=0; i < shapes.length; i++){
         var current = shapes[i];
@@ -78,25 +151,25 @@ function animate(){
             current.vy = -current.vy;
         }
     }
-    /*
-    star.draw();
-    
-    //star.x+=10;
-    star.x+=star.vx;
-    star.y+=star.vy;
-    if (star.x > ctx.width){
-    	star.x = ctx.width;
-    }
-    
-    if (star.x + star.vx > width || star.x + star.vx < 0){
-        star.vx = -star.vx;
-    }
-    if (star.y + star.vy > height || star.y + star.vy < 0){
-        star.vy = -star.vy;
-    }*/
+
     // This will run animate() every 33 ms
     setTimeout(animate, 33);
 
+};
+
+/*check if black holes are overlapping with each other */
+
+function isOverlapping(currentHole, spawnedBlackHoles){
+    for (var i=0; i < spawnedBlackHoles.length; i++){
+        if (currentHole.x + 50 > spawnedBlackHoles[i].x 
+        && currentHole.x < spawnedBlackHoles[i].x + 50
+        && currentHole.y + 50 > spawnedBlackHoles[i].y
+        && currentHole.y < spawnedBlackHoles[i].y + 50)
+        {
+            return true;
+        }
+    }
 }
+
 
 
