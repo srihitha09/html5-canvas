@@ -94,17 +94,31 @@ function loadImg(){
 
 function spawnRandomObject() {
 
-    var t;
+    /*determine frequency of black hole colors
+        in the blackholes array, black = 0, blue = 1, purple = 2
+        we want black holes to appear 75% of the time*/
+    var color;
+    if (Math.floor((Math.random()*100)+1) <= 75){
+        color = 0;
+    }
+    else{
+        if (Math.floor((Math.random()*100)+1) <= 75){
+            color = 1;
+        }
+        else {
+            color = 2;
+        }
+    }
+
+    
     // create the new object
     var blackhole = {
-        // set this objects type
-        type: t,
         // set x randomly 
         x: Math.random() * (1000 - 50),
         
         y: Math.random() * (640 - 50),
         // give random image
-        image: blackholes[Math.floor(Math.random()*blackholes.length)]
+        image: blackholes[color]
     }
     if (isOverlapping(blackhole, spawnedBlackHoles)!=true){
         // add the new black hole to the array of spawned holes
