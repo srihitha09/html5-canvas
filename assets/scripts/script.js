@@ -1,13 +1,21 @@
 window.onload = loadStartPage();
 
+
+
 //Loads the start page and hides canvas
 function loadStartPage(){
+    populateStorage();
     document.getElementById("gamePage").style.display= "none";
     document.getElementById("transButton").onclick = function() {loadCanvasLevel()};
 } 
 
+function populateStorage() {
+  localStorage.setItem('score', '0');
+  localStorage.setItem('level', '1');
+}
+
 var countdownTimer;
-var seconds;
+var seconds = 60;
 //timer for each level
 function timer(){
     var remainingSeconds = seconds;
@@ -44,19 +52,39 @@ function pauseTimer(){
 
 //loads transitional page
 function loadTransitional(){
-    var level = "1";
+    var currLevel = localStorage.getItem('level');
     loadStartPage();
     document.getElementById("startPage").style.display= "block";
-    document.getElementById("title").innerHTML="Level # " + level + "";
-    document.getElementById("transButton").innerHTML = "Next";
-    document.getElementById("transButton").onclick = function() {loadCanvasLevel()};
+    document.getElementById("title").innerHTML="Level # " + currLevel + "";
+    if (currLevel == '1'){
+        document.getElementById("transButton").innerHTML = "Next";
+        document.getElementById("transButton").onclick = function() {
+        localStorage.setItem('level', '2');
+        loadCanvasLevel()};
+    }
+    else{
+        document.getElementById("transButton").innerHTML = "Finish";
+        document.getElementById("transButton").onclick = function() {
+           document.getElementById("title").innerHTML= "Black Hole Mystery";
+           document.getElementById("transButton").innerHTML = "Start";
+           document.getElementById("transButton").onclick = function() {
+            
+            loadStartPage()};
+    }
+    }
+    
 }
 
 function loadCanvasLevel(){
     
-    //Logic to check level and load appropriately
-    //if level == 1
-    loadCanvas();
+    var currLevel = localStorage.getItem('level');
+    if (currLevel == '1'){
+        loadCanvas();
+    }
+    else{
+        loadCanvas();
+    }
+    
 }
 
 function loadFinishPage(){
@@ -69,6 +97,8 @@ function loadCanvas() {
     updateTimer();
     document.getElementById("startPage").style.display= "none";
     document.getElementById("gamePage").style.display= "block";
+    document.getElementById("level").innerHTML = "Level " + localStorage.getItem('level');
+    document.getElementById("levelScore").innerHTML = "Score:  " + localStorage.getItem('score');
     var c = document.getElementById("main");
     c.width = '1000';
     c.height = '640';
