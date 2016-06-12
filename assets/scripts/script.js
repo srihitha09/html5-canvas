@@ -179,7 +179,7 @@ function addShapes(){
 }
 
 function loadImg(){
-
+    
     var black = new Image();
     black.src = 'assets/images/black.svg';
     var blue = new Image();
@@ -225,6 +225,7 @@ function spawnRandomObject() {
     if (isOverlapping(blackhole, spawnedBlackHoles)!=true){
         // add the new black hole to the array of spawned holes
         spawnedBlackHoles.push(blackhole);
+             
     }
 }
 
@@ -253,6 +254,17 @@ function animate(){
         
         //draw the black hole
         ctx.drawImage(currentHole.image, currentHole.x, currentHole.y);
+        var canvas=document.getElementById("main");
+
+        var $bh = $('#hittest');
+        //var c = document.getElementById("main");
+        $(canvas).on('click', function(e) {
+        
+         var hitted = e.clientX >= spawnedBlackHoles[i].x && e.clientX <= spawnedBlackHoles[i].x + 50 && e.clientY >= spawnedBlackHoles[i].y && e.clientY <= spawnedBlackHoles[i].y + 50;
+        
+        //alert("hit "+ e.clientX + " " + e.clientY);
+    });
+
     }
 
     for (var i=0; i < shapes.length; i++){
@@ -286,6 +298,4 @@ function isOverlapping(currentHole, spawnedBlackHoles){
         }
     }
 }
-
-
 
