@@ -1,6 +1,8 @@
 window.onload = loadStartPage();
 
-
+var seconds = 60;
+var countdownTimer = 0;
+var ani;
 
 //Loads the start page and hides canvas
 function loadStartPage(){
@@ -14,27 +16,29 @@ function populateStorage() {
   localStorage.setItem('level', '1');
 }
 
-var countdownTimer;
-var seconds = 60;
+
+
+function updateTimer(){
+    countdownTimer = setInterval('timer()', 100);
+}
+
 //timer for each level
 function timer(){
-    var remainingSeconds = seconds;
-    if (remainingSeconds < 10) {
-        remainingSeconds = "0" + remainingSeconds;  
+    //var remainingSeconds = seconds;
+    if (seconds < 10) {
+        seconds = "0" + seconds;  
     }
-    document.getElementById('timer').innerHTML = remainingSeconds + " seconds";
+    document.getElementById('timer').innerHTML = seconds + " seconds";
     if (seconds == 0) {
         clearInterval(countdownTimer);
+        document.getElementById('timer').innerHTML =  "60 seconds";
+        seconds = 60;
         loadTransitional();
     } else {
         seconds--;
     }
 }
 
-function updateTimer(){
-    seconds = 60;
-    countdownTimer = setInterval('timer()', 1000);
-}
 
 function pauseTimer(){
     debugger;
@@ -281,7 +285,8 @@ function animate(){
     }
 
     // This will run animate() every 33 ms
-    setTimeout(animate, 33);
+    clearInterval(ani);
+    ani = setTimeout(animate, 33);
 
 };
 
