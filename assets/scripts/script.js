@@ -165,7 +165,7 @@ var star = {
 }
 
 // spawn a new object every 1000ms
-var spawnRate = 1000;
+var spawnRate = 1500;
 
 // when was the last object spawned
 var lastSpawn = -1;
@@ -173,9 +173,12 @@ var lastSpawn = -1;
 // this array holds all spawned object
 var spawnedBlackHoles = [];
 
+var newArr;
+
 var blackholes = [];
 // save the starting time (used to calc elapsed time)
 var startTime = Date.now();
+
 
 function addShapes(){
 
@@ -229,7 +232,20 @@ function spawnRandomObject() {
     if (isOverlapping(blackhole, spawnedBlackHoles)!=true){
         // add the new black hole to the array of spawned holes
         spawnedBlackHoles.push(blackhole);
+        updateSpawned(spawnedBlackHoles);
              
+    }
+
+}
+ctx.drawImage(black, 100, 100);
+function updateSpawned(spawnedBlackHoles){
+    newArr = spawnedBlackHoles;
+}
+
+function getSpawned(){
+    return newArr;
+    for (i=0; i<newArr.length; i++){
+        alert(newArr[i]);
     }
 }
 
@@ -258,16 +274,12 @@ function animate(){
         
         //draw the black hole
         ctx.drawImage(currentHole.image, currentHole.x, currentHole.y);
-        var canvas=document.getElementById("main");
-
-        var $bh = $('#hittest');
+        hitTest(spawnedBlackHoles);
         //var c = document.getElementById("main");
-        $(canvas).on('click', function(e) {
-        
-         var hitted = e.clientX >= spawnedBlackHoles[i].x && e.clientX <= spawnedBlackHoles[i].x + 50 && e.clientY >= spawnedBlackHoles[i].y && e.clientY <= spawnedBlackHoles[i].y + 50;
-        
+
+        //clearRect(spawnedBlackHoles[i].x, spawnedBlackHoles[i].y, 50+spawnedBlackHoles[i].x, 50+spawnedBlackHoles[i].y);
         //alert("hit "+ e.clientX + " " + e.clientY);
-    });
+
 
     }
 
@@ -304,3 +316,58 @@ function isOverlapping(currentHole, spawnedBlackHoles){
     }
 }
 
+function collides(spawnedBlackHoles, x, y) {
+    var isCollision = false;
+    for (var i = 0; i<spawnedBlackHoles.length; i++) {
+        var left = spawnedBlackHoles[i].x, right = spawnedBlackHoles[i].x+50;
+        var top = spawnedBlackHoles[i].y, bottom = spawnedBlackHoles[i].y+50;
+        if (right >= x
+            && left <= x
+            && bottom >= y
+            && top <= y) {
+            isCollision = true;
+        
+            spawnedBlackHoles.splice(i, 1);
+            //clear the black hole from the canvas when it's clicked on
+            ctx.clearRect(left, top, right, bottom);
+         
+        }
+    }
+    return currentHole;
+}
+
+var hasListener = false;
+
+/*checks if the black hole is clicked on */
+function hitTest(currentHole){
+    if (hasListener!=true){
+        var canvas = document.getElementById('main');
+        
+        canvas.addEventListener('click', function(e){
+            var mousePos = getMousePos(canvas, e);
+
+        //call collides function
+        var currentHole = collides(spawnedBlackHoles, mousePos.x, mousePos.y);
+        
+        //remove black hole
+        /*for (i=0; i<spawnedBlackHoles.length; i++){
+            if (spawnedBlackHoles[i]==currentHole){
+                spawnedBlackHoles.splice(i, 1);
+                return false;
+            }
+        }*/
+        
+        });
+        
+    }
+    hasListener = true;
+
+}
+/* get the mouse position relative to the canvas */
+function getMousePos(canvas, e) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    };
+  }
