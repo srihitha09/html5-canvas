@@ -19,7 +19,7 @@ function populateStorage() {
 
 
 function updateTimer(){
-    countdownTimer = setInterval('timer()', 100);
+    countdownTimer = setInterval('timer()', 1000);
 }
 
 //timer for each level
@@ -118,10 +118,10 @@ function loadCanvas() {
 
 var moon = {
 
-    x:95,
-    y:100,
-    vx:3,
-    vy:5,
+    x:Math.random() * (1000 - 50),
+    y:Math.random() * (640 - 50),
+    vx:1,
+    vy:1,
     draw: function() {
         
         
@@ -141,22 +141,18 @@ var moon = {
 };
 
 var star = {
-    x:50,
-    y:50,
-    nPoints:6,
-    outerRadius:25,
-    innerRadius:10,
-
-    vx:5,
-    vy:2,
+    x:Math.random() * (1000 - 50),
+    y:Math.random() * (640 - 50),
+    vx:1,
+    vy:1,
 
     draw: function(){
         ctx.beginPath();
             ctx.fillStyle = "blue";
     
         
-        for (var ixVertex = 0; ixVertex <= 2 * 6; ++ixVertex) {
-            var angle = ixVertex * Math.PI / 6 - Math.PI / 2;
+        for (var ixVertex = 0; ixVertex <= 2 * 9; ++ixVertex) {
+            var angle = ixVertex * Math.PI / 9 - Math.PI / 2;
             var radius = ixVertex % 2 == 0 ? 25 : 10;
             ctx.lineTo(this.x + radius * Math.cos(angle), this.y + radius * Math.sin(angle));
         }
@@ -164,8 +160,180 @@ var star = {
     }
 }
 
+var star2 = {
+    x:Math.random() * (1000 - 50),
+    y:Math.random() * (640 - 50),
+
+    vx:1,
+    vy:1,
+
+    draw: function(){
+        ctx.beginPath();
+        ctx.fillStyle = "purple";
+        
+        for (var ixVertex = 0; ixVertex <= 2 * 4; ++ixVertex) {
+            var angle = ixVertex * Math.PI / 4 - Math.PI / 2;
+            var radius = ixVertex % 2 == 0 ? 25 : 10;
+            ctx.lineTo(this.x + radius * Math.cos(angle), this.y + radius * Math.sin(angle));
+        }
+        ctx.fill();
+    }
+}
+
+var spaceship = {
+    x:Math.random() * (1000 - 50),
+    y:Math.random() * (640 - 50),
+    radius: 15,
+
+    vx:1,
+    vy:1,
+
+    draw: function(){
+    ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0*Math.PI,Math.PI, true);
+      ctx.fillStyle = '#BE81F7';
+      ctx.fill();
+      ctx.stroke();
+      ctx.closePath();
+      ctx.beginPath();
+        ctx.moveTo(this.x-this.radius, this.y);
+        ctx.lineTo(this.x-this.radius-10, this.y+10);
+        ctx.lineTo(this.x+this.radius+10,this.y+10);
+        ctx.lineTo(this.x+this.radius, this.y);
+        ctx.stroke();
+        ctx.fillStyle = "#1C1C1C";
+        ctx.fill();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.arc(this.x-10, this.y+5, 3, 0*Math.PI,2*Math.PI, true);
+        ctx.stroke();
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.closePath();
+                ctx.beginPath();
+        ctx.arc(this.x, this.y+5, 3, 0*Math.PI,2*Math.PI, true);
+        ctx.stroke();
+        ctx.fillStyle = "yellow";
+        ctx.fill();
+        ctx.closePath();
+                ctx.beginPath();
+        ctx.arc(this.x+10, this.y+5, 3, 0*Math.PI,2*Math.PI, true);
+        ctx.stroke();
+        ctx.fillStyle = "green";
+        ctx.fill();
+        ctx.closePath();
+        
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y-15);
+        ctx.lineTo(this.x, this.y-20);
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.arc(this.x, this.y-22, 2, 0*Math.PI,2*Math.PI, true);
+        ctx.stroke();
+        ctx.fillStyle = "black";
+        ctx.fill();
+        ctx.closePath();
+    }
+}
+
+var rock = {
+    x:Math.random() * (1000 - 50),
+    y:Math.random() * (640 - 50),
+
+    vx:-1,
+    vy:-1,
+
+    draw: function(){
+        ctx.beginPath();
+      ctx.moveTo(this.x,this.y);
+      ctx.lineTo(this.x+4, this.y+38);
+      ctx.lineTo(this.x+32, this.y+45);
+      ctx.lineTo(this.x+48, this.y+35);
+      ctx.lineTo(this.x+40, this.y+4);
+      ctx.lineTo(this.x+10, this.y);
+      ctx.lineTo(this.x, this.y);
+      ctx.fillStyle ="gray";
+      ctx.fill();
+      ctx.stroke();
+      ctx.closePath();
+      
+      
+      ctx.beginPath();
+        ctx.arc(this.x+25, this.y+15, 3, 0*Math.PI,2*Math.PI, true);
+        //ctx.stroke();
+        ctx.fillStyle = "#A4A4A4";
+        ctx.fill();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.arc(this.x+30, this.y+33, 5, 0*Math.PI,2*Math.PI, true);
+        //ctx.stroke();
+        ctx.fillStyle = "#BDBDBD";
+        ctx.fill();
+        ctx.closePath();
+    }
+}
+
+var asteroid = {
+    x:Math.random() * (1000 - 50),
+    y:Math.random() * (640 - 50),
+
+    vx:-1,
+    vy:-1,
+
+    draw: function(){
+              ctx.beginPath();
+      ctx.moveTo(this.x,this.y);
+      ctx.lineTo(this.x-15,this.y+10);
+      ctx.lineTo(this.x-20,this.y+25);
+      ctx.lineTo(this.x-10,this.y+45);
+      ctx.lineTo(this.x+15,this.y+48);
+      ctx.lineTo(this.x+23,this.y+25);
+      ctx.lineTo(this.x+20,this.y+15);
+      ctx.lineTo(this.x+5,this.y+10);
+      ctx.lineTo(this.x,this.y);
+      
+      var grd=ctx.createLinearGradient(0,0,0,this.y+50);
+grd.addColorStop(0,"black");
+grd.addColorStop(1,"#B45F04");
+
+ctx.fillStyle=grd;
+      //ctx.fillStyle ="#B45F04";
+      ctx.fill();
+      ctx.stroke();
+      ctx.closePath();
+      
+      
+      ctx.beginPath();
+        ctx.arc(this.x+0, this.y+15, 4, 0*Math.PI,2*Math.PI, true);
+        //ctx.stroke();
+        ctx.fillStyle = "#8A4B08";
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.beginPath();
+        ctx.arc(this.x+5, this.y+33, 6, 0*Math.PI,2*Math.PI, true);
+        //ctx.stroke();
+                
+        ctx.fillStyle = "#DF7401";
+        ctx.fill();
+        ctx.closePath();
+        
+              ctx.beginPath();
+        ctx.arc(this.x-10, this.y+25, 3, 0*Math.PI,2*Math.PI, true);
+        //ctx.stroke();
+        ctx.fillStyle = "#8A4B08";
+        ctx.fill();
+        ctx.closePath();
+    }
+}
+
 // spawn a new object every 1000ms
-var spawnRate = 1500;
+var spawnRate = 500;
 
 // when was the last object spawned
 var lastSpawn = -1;
@@ -194,9 +362,9 @@ function loadImg(){
     var purple = new Image();
     purple.src = 'assets/images/purple.svg';
 
-    blackholes.push(black);
     blackholes.push(blue);
     blackholes.push(purple);
+    blackholes.push(black);
 
     animate();
 }
@@ -222,14 +390,15 @@ function spawnRandomObject() {
     
     // create the new object
     var blackhole = {
+        color: color,
+        count: 0,
         // set x randomly 
-        x: Math.random() * (1000 - 50),
-        
-        y: Math.random() * (640 - 50),
+        x:Math.random() * (1000 - 50),
+    y:Math.random() * (640 - 50),
         // give random image
         image: blackholes[color]
     }
-    if (isOverlapping(blackhole, spawnedBlackHoles)!=true){
+    if (isOverlapping(blackhole, spawnedBlackHoles, 180, 180)!=true){
         // add the new black hole to the array of spawned holes
         spawnedBlackHoles.push(blackhole);
         updateSpawned(spawnedBlackHoles);
@@ -237,7 +406,9 @@ function spawnRandomObject() {
     }
 
 }
-ctx.drawImage(black, 100, 100);
+var shapes = new Array(star,moon, spaceship, star2, rock, asteroid);
+
+//var shapes = new Array(star);
 function updateSpawned(spawnedBlackHoles){
     newArr = spawnedBlackHoles;
 }
@@ -252,7 +423,6 @@ function getSpawned(){
 function animate(){
     window.ctx.fillStyle = "black";
     window.ctx.fillRect(0,0,width,height);
-        var shapes = new Array(star,moon);
 
 
     var width = 1000;
@@ -295,6 +465,119 @@ function animate(){
             current.vy = -current.vy;
         }
     }
+    var f = 0;
+    var dx, dy, dist, speed, xs, ys;
+    var speed = 0;
+    for (var i=0; i<spawnedBlackHoles.length; i++){
+        for (var j=0; j<shapes.length; j++){
+            if (inEventHorizon(shapes[j], spawnedBlackHoles[i])){
+                current = shapes[j];
+                //alert('t');
+                dx = currentHole.x+25 - current.x;
+                dy = currentHole.y+25 - current.y;
+                dist = Math.sqrt(dx * dx + dy * dy);
+                var rad = Math.atan2(dy, dx);
+                var angle = rad/Math.PI * 180;
+                
+                if (currentHole.color==0){
+                    //alert('blue');
+                    speed = 2;
+                }
+                if (currentHole.color==1){
+                    //alert('purple');
+                    speed = 3;
+                }
+                if (currentHole.color==2){
+                    //alert('black');
+                    speed = 5;
+                }
+                
+                xs = dx/dist * speed;
+                ys = dy/dist * speed;
+
+                if (dist > 2){
+                    current.x += xs;
+                    current.y += ys;
+                    if (isOverlapping(current, spawnedBlackHoles, 25, 25)){
+                        shapes.splice(j,1);
+                         
+                        /******
+                        OBJECT DISAPPEARS 
+                        SUBTRACT POINTS HERE************************/
+                        currentHole.count++;
+                    }
+                     
+                    
+                }
+                else{
+
+                    shapes.splice(j,1);
+                    if (isOverlapping(current, spawnedBlackHoles, 25, 25)){
+                        shapes.splice(j,1);
+                         
+                        /******
+                        OBJECT DISAPPEARS 
+                        SUBTRACT POINTS HERE************************/
+                        currentHole.count++;
+
+                        /******BLACK HOLES DISAPPEAR WHEN THEY'VE EATEN 
+                        ENOUGH OBJECTS********************/
+                    }
+                }
+                if ((currentHole.color==0 && currentHole.count>=3) || 
+                            (currentHole.color==1 && currentHole.count>=2) || 
+                             (currentHole.color==2 && currentHole.count>=1)){
+                            spawnedBlackHoles.splice(i,1);
+                        }
+                /*
+                if (dist < 50){
+                    if (current.x > currentHole.x){
+                        current.x -= Math.abs(current.vx);
+                        if(current.x<currentHole.x)
+                            {current.x=currentHole.x;}
+                    }
+                    else{
+                        current.x += Math.abs(current.vx);
+                        if(current.x>currentHole.x)
+                            {current.x=currentHole.x;}
+                    }
+                    
+                    if (current.y > currentHole.y){
+                        current.y -= Math.abs(current.vy);
+                        if(current.y<currentHole.y)
+                            {current.y=currentHole.y;}
+                    }
+                    else{
+                        current.y += Math.abs(current.vy);
+                        if(current.y>currentHole.y)
+                            {current.y=currentHole.y;}
+                    }
+                }*/
+            
+
+                /*if (current.y==currentHole.y && current.x==currentHole.x){
+                //if (isOverlapping(current, spawnedBlackHoles, 50, 50)){
+
+                    shapes.splice(j,1);
+                    /******
+                    OBJECT DISAPPEARS 
+                    SUBTRACT POINTS HERE************************/
+                    //currentHole.count++;
+
+                    /******BLACK HOLES DISAPPEAR WHEN THEY'VE EATEN 
+                    ENOUGH OBJECTS********************/
+                    /*if ((currentHole.color==0 && currentHole.count==2) || 
+                        (currentHole.color==1 && currentHole.count==1) || 
+                         (currentHole.color==2 && currentHole.count==1)){
+                        spawnedBlackHoles.splice(i,1);
+                    }
+                }*/
+            
+               
+            }
+
+        }
+    }
 
     // This will run animate() every 33 ms
     clearInterval(ani);
@@ -302,14 +585,38 @@ function animate(){
 
 };
 
+
+function inEventHorizon(currentShape, currentHole){
+    var leftHorizon = currentHole.x - 25, rightHorizon = currentHole.x + 75;
+    var topHorizon = currentHole.y - 25, bottomHorizon = currentHole.y + 75;
+
+    var left = currentShape.x, right = currentShape.x+50;
+    var top = currentShape.y, bottom = currentShape.y+50;
+    
+    var distX = Math.abs(currentShape.x - leftHorizon - 100 / 2);
+    var distY = Math.abs(currentShape.y - topHorizon - 100 / 2);
+    if (distX > (100 / 2 + 25)) {
+        return false;
+    }
+    if (distY > (100 / 2 + 25)) {
+        return false;
+    }
+
+    if (distX <= (100 / 2)) {
+        return true;
+    }
+    if (distY <= (100 / 2)) {
+        return true;
+    }
+}
 /*check if black holes are overlapping with each other */
 
-function isOverlapping(currentHole, spawnedBlackHoles){
+function isOverlapping(currentHole, spawnedBlackHoles, width, height){
     for (var i=0; i < spawnedBlackHoles.length; i++){
-        if (currentHole.x + 50 > spawnedBlackHoles[i].x 
-        && currentHole.x < spawnedBlackHoles[i].x + 50
-        && currentHole.y + 50 > spawnedBlackHoles[i].y
-        && currentHole.y < spawnedBlackHoles[i].y + 50)
+        if (currentHole.x + width > spawnedBlackHoles[i].x 
+        && currentHole.x < spawnedBlackHoles[i].x + width
+        && currentHole.y + height > spawnedBlackHoles[i].y
+        && currentHole.y < spawnedBlackHoles[i].y + height)
         {
             return true;
         }
