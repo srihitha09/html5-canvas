@@ -1,19 +1,43 @@
 window.onload = loadStartPage();
 
-var seconds = 60;
+var currScore = 200;
+var seconds = 59;
 var countdownTimer = 0;
 var ani;
+var c = document.getElementById("main");
+c.width = '1000';
+c.height = '640';
+window.ctx = c.getContext("2d"); 
+// spawn a new object every 1000ms
+var spawnRate = 1500;
+
+// when was the last object spawned
+var lastSpawn = -1;
+
+// this array holds all spawned object
+var spawnedBlackHoles = [];
+
+var newArr;
+
+var blackholes = [];
+// save the starting time (used to calc elapsed time)
+var startTime = Date.now();
+var highScores = [];
+var gamePaused = false;
 
 //Loads the start page and hides canvas
 function loadStartPage(){
     populateStorage();
     document.getElementById("gamePage").style.display= "none";
+    //document.getElementById("score").innerHTML = "High Score:" + localStorage.getItem('highScore');
     document.getElementById("transButton").onclick = function() {loadCanvasLevel()};
 } 
 
 function populateStorage() {
-  localStorage.setItem('score', '0');
-  localStorage.setItem('level', '1');
+
+    localStorage.setItem('highScore', '0');
+    localStorage.setItem('score', '200');
+    localStorage.setItem('level', '1');
 }
 
 
@@ -32,7 +56,7 @@ function timer(){
     if (seconds == 0) {
         clearInterval(countdownTimer);
         document.getElementById('timer').innerHTML =  "60 seconds";
-        seconds = 60;
+        seconds = 59;
         loadTransitional();
     } else {
         seconds--;
@@ -41,7 +65,6 @@ function timer(){
 
 
 function pauseTimer(){
-    debugger;
     var text = document.getElementById("pause").innerHTML;
     if(text === "Pause"){
         document.getElementById("pause").innerHTML = "Resume";
@@ -51,6 +74,7 @@ function pauseTimer(){
         document.getElementById("pause").innerHTML = "Pause";
         countdownTimer = setInterval('timer()', 1000);
     }
+    pauseGame();
     
 }
 
@@ -60,6 +84,7 @@ function loadTransitional(){
     loadStartPage();
     document.getElementById("startPage").style.display= "block";
     document.getElementById("title").innerHTML="Level # " + currLevel + "";
+    document.getElementById("score").innerHTML= "Score: " + currScore;
     if (currLevel == '1'){
         document.getElementById("transButton").innerHTML = "Next";
         document.getElementById("transButton").onclick = function() {
@@ -71,12 +96,26 @@ function loadTransitional(){
         document.getElementById("transButton").onclick = function() {
            document.getElementById("title").innerHTML= "Black Hole Mystery";
            document.getElementById("transButton").innerHTML = "Start";
+           highscoreUpdate();
            document.getElementById("transButton").onclick = function() {
-            
-            loadStartPage()};
+            localStorage.setItem('level', '1');
+            currScore = 200;
+            clearCanvas();
+            loadCanvasLevel()};
     }
     }
     
+}
+function highscoreUpdate(){
+    highScores.push(currScore);
+    highScores.sort(function(a, b){return b-a});
+    var update = " ";
+    for (var i =0; i < highScores.length; i++){
+        update +=   highScores[i] + "; "
+    }
+    document.getElementById("score").innerHTML= "High Score: " + update;
+
+
 }
 
 function loadCanvasLevel(){
@@ -86,7 +125,10 @@ function loadCanvasLevel(){
         loadCanvas();
     }
     else{
+        localStorage.setItem('score', String(currScore));
+        clearCanvas();
         loadCanvas();
+        
     }
     
 }
@@ -97,19 +139,23 @@ function loadFinishPage(){
 
 
 //Loads the canvas and hides start page
-function loadCanvas() { 
+function loadCanvas() {
+    var currLevel = localStorage.getItem('level');
+   
+    
+    //clearCanvas();
     updateTimer();
     document.getElementById("startPage").style.display= "none";
     document.getElementById("gamePage").style.display= "block";
     document.getElementById("level").innerHTML = "Level " + localStorage.getItem('level');
     document.getElementById("levelScore").innerHTML = "Score:  " + localStorage.getItem('score');
-    var c = document.getElementById("main");
-    c.width = '1000';
-    c.height = '640';
-    window.ctx = c.getContext("2d"); // Dealing with a global context is easier
+    
+    // Dealing with a global context is easier
     //addShapes();
     loadImg();  
 }
+
+
 
 
 /* 
@@ -159,6 +205,7 @@ var star = {
         ctx.fill();
     }
 }
+
 
 var star2 = {
     x:Math.random() * (1000 - 50),
@@ -335,17 +382,208 @@ ctx.fillStyle=grd;
 // spawn a new object every 1000ms
 var spawnRate = 500;
 
-// when was the last object spawned
-var lastSpawn = -1;
+var sunShape = {
+    x:500,
+    y:300,
+    vx:3,
+    vy:5,
 
-// this array holds all spawned object
-var spawnedBlackHoles = [];
 
-var newArr;
+    draw: function(){
+         ctx.beginPath();
+        ctx.arc(this.x, this.y, 15, 0, Math.PI*2, true);
+        ctx.fillStyle = '#ff9900';
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x-17, this.y);
+        ctx.lineTo(this.x-30, this.y);
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x+17, this.y);
+        ctx.lineTo(this.x+30, this.y);
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y+16);
+        ctx.lineTo(this.x, this.y+30);
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x-10, this.y-13);
+        ctx.lineTo(this.x-20,this.y-25);
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x+10, this.y-13);
+        ctx.lineTo(this.x+20, this.y-25);
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x-10, this.y+13);
+        ctx.lineTo(this.x-20, this.y+25);
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x+10, this.y+13);
+        ctx.lineTo(this.x+20, this.y+25);
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y-16);
+        ctx.lineTo(this.x, this.y-30);
+        ctx.stroke();
+        ctx.closePath();
+        
+    }
+};
 
-var blackholes = [];
-// save the starting time (used to calc elapsed time)
-var startTime = Date.now();
+var planet = {
+    x:400,
+    y:300,
+    vx:1,
+    vy:4,
+
+    draw: function(){
+       ctx.beginPath();
+        ctx.arc(this.x, this.y, 17, 0, Math.PI*2, true);
+        ctx.fillStyle = '#00e600';
+        ctx.fill();
+        
+        ctx.stroke();
+        ctx.closePath();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 12, 0, Math.PI*2, true);
+        ctx.fillStyle = '#009900';
+        ctx.fill();
+        ctx.stroke();
+        ctx.closePath();
+        ctx.beginPath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x-17, this.y);
+        ctx.lineTo(this.x-30, this.y);
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x+17, this.y);
+        ctx.lineTo(this.x+30, this.y);
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y+16);
+        ctx.lineTo(this.x, this.y+30);
+        ctx.stroke();
+        ctx.closePath();
+        
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y-16);
+        ctx.lineTo(this.x, this.y-30);
+        ctx.stroke();
+        ctx.closePath();
+        
+}
+};
+
+var ufo = {
+    
+    x:95,
+    y:100,
+    radius:15,
+    vx:1,
+    vy:2,
+
+    draw: function(){
+    
+    // draw circle which will be stretched into an oval
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+    ctx.fillStyle = '#000066';
+    ctx.fill();
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.beginPath();  
+    ctx.moveTo(this.x+10, this.y+10);
+    ctx.lineTo(this.x+12, this.y+20);
+    ctx.stroke();
+    ctx.closePath();
+    
+    ctx.beginPath();
+    ctx.moveTo(this.x-10, this.y+12);
+    ctx.lineTo(this.x-12, this.y+20);
+    ctx.stroke();
+    ctx.closePath();
+  
+    ctx.beginPath();
+    ctx.arc(this.x, this.y-13, this.radius/2, 0, Math.PI, true);
+
+    ctx.strokeStyle = '#000066';
+
+    ctx.stroke();
+    ctx.closePath();
+    ctx.strokeStyle = 'black';
+
+    // restore to original state
+    //ctx.restore();
+}
+};
+
+var rocket = {
+    
+    x:95,
+    y:500,
+    vx:1,
+    vy:2,
+
+    draw: function(){
+    
+     ctx.rect(this.x,this.y,20,35);
+     ctx.fillStyle = '#cc0000'
+     ctx.fill();
+        ctx.stroke();
+    
+    ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x+10, this.y-20);
+    ctx.stroke();
+    ctx.closePath();
+   
+    ctx.beginPath();
+    ctx.moveTo(this.x+21, this.y);
+        ctx.lineTo(this.x+10, this.y-20);
+        ctx.stroke();
+    ctx.closePath();
+    
+    ctx.beginPath();  
+    ctx.moveTo(this.x+16, this.y+35);
+    ctx.lineTo(this.x+25, this.y+40);
+    ctx.stroke();
+    ctx.closePath();
+    
+    ctx.beginPath();  
+    ctx.moveTo(this.x+3, this.y+35);
+    ctx.lineTo(this.x-5, this.y+40);
+    ctx.stroke();
+    ctx.closePath();
+}
+};
+
+
+
 
 
 function addShapes(){
@@ -391,6 +629,7 @@ function spawnRandomObject() {
     // create the new object
     var blackhole = {
         color: color,
+
         count: 0,
         // set x randomly 
         x:Math.random() * (1000 - 50),
@@ -406,7 +645,7 @@ function spawnRandomObject() {
     }
 
 }
-var shapes = new Array(star,moon, spaceship, star2, rock, asteroid);
+var shapes = new Array(star,moon, spaceship, star2, rock, asteroid, sunShape, planet, ufo, rocket);
 
 //var shapes = new Array(star);
 function updateSpawned(spawnedBlackHoles){
@@ -472,6 +711,7 @@ function animate(){
         for (var j=0; j<shapes.length; j++){
             if (inEventHorizon(shapes[j], spawnedBlackHoles[i])){
                 current = shapes[j];
+                currentHole = spawnedBlackHoles[i];
                 //alert('t');
                 dx = currentHole.x+25 - current.x;
                 dy = currentHole.y+25 - current.y;
@@ -518,16 +758,18 @@ function animate(){
                         /******
                         OBJECT DISAPPEARS 
                         SUBTRACT POINTS HERE************************/
+                        currScore -= 50;
                         currentHole.count++;
 
                         /******BLACK HOLES DISAPPEAR WHEN THEY'VE EATEN 
                         ENOUGH OBJECTS********************/
                     }
                 }
-                if ((currentHole.color==0 && currentHole.count>=3) || 
-                            (currentHole.color==1 && currentHole.count>=2) || 
-                             (currentHole.color==2 && currentHole.count>=1)){
+                if ((currentHole.color==0 && currentHole.count==3) || 
+                            (currentHole.color==1 && currentHole.count==2) || 
+                             (currentHole.color==2 && currentHole.count==1)){
                             spawnedBlackHoles.splice(i,1);
+                        currScore -= 50;
                         }
                 /*
                 if (dist < 50){
@@ -554,24 +796,8 @@ function animate(){
                     }
                 }*/
             
-
-                /*if (current.y==currentHole.y && current.x==currentHole.x){
-                //if (isOverlapping(current, spawnedBlackHoles, 50, 50)){
-
-                    shapes.splice(j,1);
-                    /******
-                    OBJECT DISAPPEARS 
-                    SUBTRACT POINTS HERE************************/
-                    //currentHole.count++;
-
-                    /******BLACK HOLES DISAPPEAR WHEN THEY'VE EATEN 
-                    ENOUGH OBJECTS********************/
-                    /*if ((currentHole.color==0 && currentHole.count==2) || 
-                        (currentHole.color==1 && currentHole.count==1) || 
-                         (currentHole.color==2 && currentHole.count==1)){
-                        spawnedBlackHoles.splice(i,1);
-                    }
-                }*/
+                localStorage.setItem('score', String(currScore));
+    document.getElementById("levelScore").innerHTML = "Score:  " + localStorage.getItem('score');
             
                
             }
@@ -634,13 +860,34 @@ function collides(spawnedBlackHoles, x, y) {
             && top <= y) {
             isCollision = true;
         
+            updatepoints(spawnedBlackHoles[i]);
             spawnedBlackHoles.splice(i, 1);
             //clear the black hole from the canvas when it's clicked on
             ctx.clearRect(left, top, right, bottom);
+            
          
         }
     }
     return currentHole;
+}
+
+function updatepoints(blackholeClicked){
+    if (blackholeClicked.color == 1){
+        currScore += 5;
+        
+    }
+    else if (blackholeClicked.color == 2){
+        currScore += 10;
+        
+    }
+    else{
+        currScore += 20;
+    }
+
+    localStorage.setItem('score', String(currScore));
+    document.getElementById("levelScore").innerHTML = "Score:  " + localStorage.getItem('score');
+
+
 }
 
 var hasListener = false;
@@ -678,3 +925,18 @@ function getMousePos(canvas, e) {
       y: e.clientY - rect.top
     };
   }
+function pauseGame(){
+    if (!gamePaused) {
+    ani = clearTimeout(ani);
+    gamePaused = true;
+  } else if (gamePaused) {
+    ani = setTimeout(animate, 33);
+    gamePaused = false;
+  }
+}
+
+function clearCanvas() {
+    blackholes.length = 0;
+    newArr.length = 0;
+    ctx.clearRect(0, 0, 1000, 640);
+};
