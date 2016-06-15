@@ -389,7 +389,7 @@ ctx.fillStyle=grd;
 }
 
 // spawn a new object every 1000ms
-var spawnRate = 1500;
+//var spawnRate = 1500;
 
 var sunShape = {
     x:500,
