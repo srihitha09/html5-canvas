@@ -44,7 +44,7 @@ function populateStorage() {
 
 
 function updateTimer(){
-    countdownTimer = setInterval('timer()', 100);
+    countdownTimer = setInterval('timer()', 1000);
 }
 
 //timer for each level
@@ -468,16 +468,15 @@ var planet = {
         ctx.arc(this.x, this.y, 17, 0, Math.PI*2, true);
         ctx.fillStyle = '#00e600';
         ctx.fill();
-        
         ctx.stroke();
         ctx.closePath();
+        
         ctx.beginPath();
         ctx.arc(this.x, this.y, 12, 0, Math.PI*2, true);
         ctx.fillStyle = '#009900';
         ctx.fill();
         ctx.stroke();
         ctx.closePath();
-        ctx.beginPath();
         
         ctx.beginPath();
         ctx.moveTo(this.x-17, this.y);
@@ -511,7 +510,7 @@ var ufo = {
     x:95,
     y:100,
     radius:15,
-    vx:1,
+    vx:3,
     vy:2,
 
     draw: function(){
@@ -539,15 +538,12 @@ var ufo = {
   
     ctx.beginPath();
     ctx.arc(this.x, this.y-13, this.radius/2, 0, Math.PI, true);
-
     ctx.strokeStyle = '#000066';
-
     ctx.stroke();
     ctx.closePath();
+    
     ctx.strokeStyle = 'black';
 
-    // restore to original state
-    //ctx.restore();
 }
 };
 
@@ -555,50 +551,33 @@ var rocket = {
     
     x:95,
     y:500,
-    vx:1,
+    vx:4,
     vy:2,
 
     draw: function(){
-    
-     ctx.rect(this.x,this.y,20,35);
-     ctx.fillStyle = '#cc0000'
-     ctx.fill();
+        ctx.beginPath();
+        ctx.rect(this.x,this.y,20,30);
+        ctx.fillStyle = '#cc0000'
+        ctx.fill();
         ctx.stroke();
+        ctx.closePath();
     
-    ctx.beginPath();
+        ctx.beginPath();
         ctx.moveTo(this.x, this.y);
         ctx.lineTo(this.x+10, this.y-20);
-    ctx.stroke();
-    ctx.closePath();
+        ctx.stroke();
+        ctx.closePath();
    
-    ctx.beginPath();
-    ctx.moveTo(this.x+21, this.y);
+        ctx.beginPath();
+        ctx.moveTo(this.x+21, this.y);
         ctx.lineTo(this.x+10, this.y-20);
         ctx.stroke();
-    ctx.closePath();
+        ctx.closePath();
     
-    ctx.beginPath();  
-    ctx.moveTo(this.x+16, this.y+35);
-    ctx.lineTo(this.x+25, this.y+40);
-    ctx.stroke();
-    ctx.closePath();
-    
-    ctx.beginPath();  
-    ctx.moveTo(this.x+3, this.y+35);
-    ctx.lineTo(this.x-5, this.y+40);
-    ctx.stroke();
-    ctx.closePath();
+       
 }
 };
 
-
-
-
-
-function addShapes(){
-
-
-}
 
 function loadImg(){
     
