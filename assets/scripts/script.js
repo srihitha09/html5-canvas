@@ -876,11 +876,11 @@ function collides(spawnedBlackHoles, x, y) {
 }
 
 function updatepoints(blackholeClicked){
-    if (blackholeClicked.color == 1){
+    if (blackholeClicked.color == 0){
         currScore += 5;
         
     }
-    else if (blackholeClicked.color == 2){
+    else if (blackholeClicked.color == 1){
         currScore += 10;
         
     }
