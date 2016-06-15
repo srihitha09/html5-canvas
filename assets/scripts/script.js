@@ -44,7 +44,7 @@ function populateStorage() {
 
 
 function updateTimer(){
-    countdownTimer = setInterval('timer()', 1000);
+    countdownTimer = setInterval('timer()', 100);
 }
 
 //timer for each level
@@ -85,7 +85,7 @@ function loadTransitional(){
     loadStartPage();
     document.getElementById("startPage").style.display= "block";
     document.getElementById("title").innerHTML="Level # " + currLevel + "";
-    document.getElementById("score").innerHTML= "Score: " + currScore;
+    document.getElementById("score").innerHTML= "Score: " + currScore + " points";
     if (currLevel == '1' && shapes.length != 0){
         document.getElementById("transButton").innerHTML = "Next";
         document.getElementById("transButton").onclick = function() {
@@ -112,10 +112,15 @@ function highscoreUpdate(){
     highScores.push(currScore);
     highScores.sort(function(a, b){return b-a});
     var update = " ";
+    document.getElementById("score").innerHTML= "High Score: ";
+    var list = document.getElementById('score');
     for (var i =0; i < highScores.length; i++){
-        update +=   highScores[i] + "; "
+        //update +=   highScores[i] + "; "
+        var entry = document.createElement('li');
+        entry.appendChild(document.createTextNode(highScores[i] + " points"));
+        list.appendChild(entry);
     }
-    document.getElementById("score").innerHTML= "High Score: " + update;
+
 
 
 }
