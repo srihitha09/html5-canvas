@@ -54,7 +54,7 @@ function timer(){
         seconds = "0" + seconds;  
     }
     document.getElementById('timer').innerHTML = seconds + " seconds";
-    if (seconds == 0) {
+    if (seconds == 0 || shapes.length == 0) {
         clearInterval(countdownTimer);
         document.getElementById('timer').innerHTML =  "60 seconds";
         seconds = 59;
@@ -86,7 +86,7 @@ function loadTransitional(){
     document.getElementById("startPage").style.display= "block";
     document.getElementById("title").innerHTML="Level # " + currLevel + "";
     document.getElementById("score").innerHTML= "Score: " + currScore;
-    if (currLevel == '1'){
+    if (currLevel == '1' && shapes.length != 0){
         document.getElementById("transButton").innerHTML = "Next";
         document.getElementById("transButton").onclick = function() {
         localStorage.setItem('level', '2');
