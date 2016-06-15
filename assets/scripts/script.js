@@ -9,7 +9,7 @@ c.width = '1000';
 c.height = '640';
 window.ctx = c.getContext("2d"); 
 // spawn a new object every 1000ms
-var spawnRate = 1500;
+var spawnRate = 1000;
 
 // when was the last object spawned
 var lastSpawn = -1;
@@ -24,6 +24,7 @@ var blackholes = [];
 var startTime = Date.now();
 var highScores = [];
 var gamePaused = false;
+var shapes;
 
 //Loads the start page and hides canvas
 function loadStartPage(){
@@ -101,6 +102,7 @@ function loadTransitional(){
             localStorage.setItem('level', '1');
             currScore = 200;
             clearCanvas();
+            shapes = new Array(star,moon, spaceship, star2, rock, asteroid, sunShape, planet, ufo, rocket);
             loadCanvasLevel()};
     }
     }
@@ -117,7 +119,7 @@ function highscoreUpdate(){
 
 
 }
-
+shapes = new Array(star,moon, spaceship, star2, rock, asteroid, sunShape, planet, ufo, rocket);
 function loadCanvasLevel(){
     
     var currLevel = localStorage.getItem('level');
@@ -127,6 +129,8 @@ function loadCanvasLevel(){
     else{
         localStorage.setItem('score', String(currScore));
         clearCanvas();
+        spawnRate = 300;
+        shapes = new Array(star,moon, spaceship, star2, rock, asteroid, sunShape, planet, ufo, rocket);
         loadCanvas();
         
     }
@@ -645,7 +649,7 @@ function spawnRandomObject() {
     }
 
 }
-var shapes = new Array(star,moon, spaceship, star2, rock, asteroid, sunShape, planet, ufo, rocket);
+shapes = new Array(star,moon, spaceship, star2, rock, asteroid, sunShape, planet, ufo, rocket);
 
 //var shapes = new Array(star);
 function updateSpawned(spawnedBlackHoles){
