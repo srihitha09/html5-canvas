@@ -9,7 +9,7 @@ c.width = '1000';
 c.height = '640';
 window.ctx = c.getContext("2d"); 
 // spawn a new object every 1000ms
-var spawnRate = 1000;
+var spawnRate = 1500;
 
 // when was the last object spawned
 var lastSpawn = -1;
@@ -134,7 +134,7 @@ function loadCanvasLevel(){
     else{
         localStorage.setItem('score', String(currScore));
         clearCanvas();
-        spawnRate = 300;
+        spawnRate = 750;
         shapes = new Array(star,moon, spaceship, star2, rock, asteroid, sunShape, planet, ufo, rocket);
         loadCanvas();
         
@@ -199,7 +199,7 @@ var star = {
     x:Math.random() * (1000 - 50),
     y:Math.random() * (640 - 50),
     vx:1,
-    vy:1,
+    vy:3,
 
     draw: function(){
         ctx.beginPath();
@@ -389,7 +389,7 @@ ctx.fillStyle=grd;
 }
 
 // spawn a new object every 1000ms
-var spawnRate = 500;
+var spawnRate = 1500;
 
 var sunShape = {
     x:500,
