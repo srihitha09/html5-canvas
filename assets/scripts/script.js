@@ -744,6 +744,8 @@ function animate(){
                     current.y += ys;
                     if (isOverlapping(current, spawnedBlackHoles, 25, 25)){
                         shapes.splice(j,1);
+                        currScore -= 50;
+
                          
                         /******
                         OBJECT DISAPPEARS 
@@ -756,6 +758,7 @@ function animate(){
                 else{
 
                     shapes.splice(j,1);
+                    currScore -= 50;
                     if (isOverlapping(current, spawnedBlackHoles, 25, 25)){
                         shapes.splice(j,1);
                          
